@@ -1,7 +1,7 @@
 #!/bin/bash
 if (( $# != 1 )); then
-	echo "usage: install.sh <project name>"
-	exit
+  echo "usage: install.sh <project name>"
+  exit
 fi
 
 old_project_name=djangoinitializr
@@ -10,8 +10,10 @@ date_format=`date +%Y-%m-%d`
 backup_extension=".$date_format.backup"
 
 echo "Installing project as '$1'"
-echo "Old project name: $old_project_name"
-echo "Backup extension: $backup_extension"
-find . -name "*.py" -exec sed -i.`date +%Y-%m-%d`.backup 's/$djangoinitializr/$1/g' {} \;
-mkdir backup
-find . -name "*$backup_extension" 
+
+mkdir -p backup
+mv $old_project_name $new_project_name
+find . -name "*.py" -exec sed -i.`date +%Y-%m-%d`.backup "s/$old_project_name/$new_project_name/g" {} \;
+find . -name "*$backup_extension" -exec mv {} backup \; &> /dev/null
+echo "Backing up files to ./backup"
+echo "Done!"
